@@ -1,18 +1,20 @@
 import React, { Component } from "react";
 import NavBar from "./components/navbar";
 import Counters from "./components/counters";
+import CounterTable from "./components/ctable";
+import CounterForm from "./components/cform";
 
 class App extends Component {
   state = {
     counters: [
-      { id: 1, value: 0 },
-      { id: 2, value: 0 },
-      { id: 3, value: 0 },
-      { id: 4, value: 0 }
-    ]
+      { id: 1111, value: 0 },
+      { id: 2222, value: 0 },
+      { id: 3333, value: 0 },
+      { id: 4444, value: 0 },
+    ],
   };
 
-  handleIncrement = counter => {
+  handleIncrement = (counter) => {
     const counters = [...this.state.counters];
     const index = counters.indexOf(counter);
     counters[index] = { ...counters[index] };
@@ -20,7 +22,7 @@ class App extends Component {
     this.setState({ counters });
   };
 
-  handleDecrement = counter => {
+  handleDecrement = (counter) => {
     const counters = [...this.state.counters];
     const index = counters.indexOf(counter);
     counters[index] = { ...counters[index] };
@@ -28,16 +30,31 @@ class App extends Component {
     this.setState({ counters });
   };
 
+  handleInput = (counter, value) => {
+    const counters = [...this.state.counters];
+    const index = counters.indexOf(counter);
+    counters[index] = { ...counters[index] };
+    counters[index].value = value;
+    this.setState({ counters });
+  };
+
+  handleSubmit = (id, value) => {
+    const counters = this.state.counters;
+    counters.push({ id: id, value: value });
+    this.setState({ counters });
+    alert("Counter Added: " + id + "-" + value);
+  };
+
   handleReset = () => {
-    const counters = this.state.counters.map(c => {
+    const counters = this.state.counters.map((c) => {
       c.value = 0;
       return c;
     });
     this.setState({ counters });
   };
 
-  handleDelete = counterId => {
-    const counters = this.state.counters.filter(c => c.id !== counterId);
+  handleDelete = (counterId) => {
+    const counters = this.state.counters.filter((c) => c.id !== counterId);
     this.setState({ counters });
   };
 
@@ -49,8 +66,9 @@ class App extends Component {
     return (
       <div>
         <NavBar
-          totalCounters={this.state.counters.filter(c => c.value > 0).length}
+          totalCounters={this.state.counters.filter((c) => c.value > 0).length}
         />
+        <CounterForm onSubmit={this.handleSubmit} />
         <main className="container">
           <Counters
             counters={this.state.counters}
@@ -61,6 +79,11 @@ class App extends Component {
             onRestart={this.handleRestart}
           />
         </main>
+        <CounterTable
+          counters={this.state.counters.filter((c) => c.value !== 0)}
+          onInput={this.handleInput}
+          onDelete={this.handleDelete}
+        />
       </div>
     );
   }

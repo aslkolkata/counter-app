@@ -6,6 +6,14 @@ class Counter extends Component {
       <div>
         <div className="row">
           <div className="col-md-1">
+            <span
+              className="badge badge-pill badge-info m-2"
+              style={{ width: 50 }}
+            >
+              {this.props.counter.id}
+            </span>
+          </div>
+          <div className="col-md-1">
             <span style={{ fontSize: 24 }} className={this.getBadgeClasses()}>
               {this.formatCount()}
             </span>
