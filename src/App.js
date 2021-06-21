@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import NavBar from "./components/navbar";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import CounterNav from "./components/cnav";
 import Counters from "./components/counters";
 import CounterTable from "./components/ctable";
 import CounterForm from "./components/cform";
@@ -65,25 +66,34 @@ class App extends Component {
   render() {
     return (
       <div>
-        <NavBar
-          totalCounters={this.state.counters.filter((c) => c.value > 0).length}
-        />
-        <CounterForm onSubmit={this.handleSubmit} />
-        <main className="container">
-          <Counters
-            counters={this.state.counters}
-            onReset={this.handleReset}
-            onIncrement={this.handleIncrement}
-            onDecrement={this.handleDecrement}
-            onDelete={this.handleDelete}
-            onRestart={this.handleRestart}
+        <Router>
+          <CounterNav
+            totalCounters={
+              this.state.counters.filter((c) => c.value > 0).length
+            }
           />
-        </main>
-        <CounterTable
-          counters={this.state.counters.filter((c) => c.value !== 0)}
-          onInput={this.handleInput}
-          onDelete={this.handleDelete}
-        />
+          <Route path="/config">
+            <CounterForm onSubmit={this.handleSubmit} />
+          </Route>
+          <Route exact path="/">
+            <main className="container">
+              <CounterForm onSubmit={this.handleSubmit} />
+              <Counters
+                counters={this.state.counters}
+                onReset={this.handleReset}
+                onIncrement={this.handleIncrement}
+                onDecrement={this.handleDecrement}
+                onDelete={this.handleDelete}
+                onRestart={this.handleRestart}
+              />
+            </main>
+            <CounterTable
+              counters={this.state.counters.filter((c) => c.value !== 0)}
+              onInput={this.handleInput}
+              onDelete={this.handleDelete}
+            />
+          </Route>
+        </Router>
       </div>
     );
   }
